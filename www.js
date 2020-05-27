@@ -10,10 +10,10 @@ process.on('uncaughtException', (err) => {
   console.log('UNCAUGHT EXCEPTION! Shutting down...');
   process.exit(1);
 });
-
+var app = require('./app');
 var mongoose = require('mongoose');
 var sql = require('mssql');
-var app = require('../app');
+
 var logger = require('morgan');
 var debug = require('debug')('node-remaster1:server');
 var http = require('http');
@@ -77,7 +77,9 @@ mongoose
     useUnifiedTopology: true,
     useFindAndModify: false,
   })
-  .then(() => console.log('MongoDB Connection successful'));
+  .then(() => {
+    console.log('MongoDB Connection successful');
+  });
 // .catch (err => console.log (err.type));
 // var tourSchema = new mongoose.Schema({
 //   name: {
@@ -107,7 +109,15 @@ mongoose
 //   .catch((err) => console.log(err));
 //////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////
-
+// if (process.env.NODE_ENV == 'production') {
+//   console.log(process.env.PORT);
+//   port = normalizePort(process.env.PORT);
+//   console.log('Running in production');
+// } else if (process.env.NODE_ENV == 'development') {
+//   port = normalizePort(process.env.PORT);
+//   console.log('Running in development');
+//   app.use(logger('dev'));
+// }
 // ////////////////////////////////////////////////////
 // // ENVIRONMENT VARIABLES
 
@@ -117,18 +127,11 @@ mongoose
 //   console.log('Running in development');
 //   app.use(logger('dev'));
 // }
-
+// console.log(process.env.PORT);
 // ////////////////////////////////////////////////////////
-if (process.env.NODE_ENV === 'production') {
-  var port = normalizePort(process.env.PORT);
-  console.log('Running in production');
-} else if (process.env.NODE_ENV === 'development') {
-  var port = normalizePort(process.env.PORT);
-  console.log('Running in development');
-  app.use(logger('dev'));
-}
+
 // var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
+
 /**
  * Create HTTP server.
  */
@@ -136,7 +139,8 @@ var server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
-
+const port = process.env.PORT || 4000;
+app.set('port', port);
 const Server = server.listen(port, () => {
   console.log('Listening to port ' + port);
 });
