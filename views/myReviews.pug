@@ -1,6 +1,20 @@
 extends base
 
 block content
-    main.main
-        .card-container
-            h2 REVIEWS PAGE NOT YET IMPLEMENTED!
+    .reviews-container
+      .revew-header REVIEWS
+      .review_content-body
+         each review in reviews
+          .reviewCount
+            .rev-header=`${review.tour.name}`
+            .reviews__rating
+              each star in [1,2,3,4,5]
+                svg.reviews__star(class=`reviews__star--${review.rating>=star ?'active' : "inactive"}`)
+                  use(xlink:href='/img/icons.svg#icon-star')
+              .figure=`${review.rating}`
+            .rev-comment
+              | #{review.review}
+            .date-line
+              .date=`${review.createdAt.toLocaleString("en-us",{day:'numeric',month:"long",year:'numeric'})}`
+              .user #{review.user.name}
+         

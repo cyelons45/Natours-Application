@@ -26,6 +26,7 @@ var userSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    bookedTours: [String],
     role: {
       type: String,
       enum: ['user', 'guide', 'lead-guide', 'admin'],
@@ -78,6 +79,11 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+userSchema.pre(/^find/, function (next) {
+  this.find({active: {$ne: false}});
+  next();
+});
+
 userSchema.methods.correctPassword = async function (
   candidatePassword,
   userPassword
@@ -96,6 +102,16 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   return false;
 };
 
+userSchema.methods.getBookedTours = function (tourID) {
+  this.bookedTours.push(tourID);
+};
+userSchema.methods.cancelBookedTours = function (tourID) {
+  let res = this.bookedTours.findIndex((el) => {
+    if (el === tourID) return el;
+  });
+  this.bookedTours.splice(res, 1);
+};
+
 userSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString('hex');
   this.passwordResetToken = crypto
@@ -105,11 +121,6 @@ userSchema.methods.createPasswordResetToken = function () {
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
   return resetToken;
 };
-
-userSchema.pre(/^find/, function (next) {
-  this.find({active: {$ne: false}});
-  next();
-});
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;

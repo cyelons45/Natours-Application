@@ -53,7 +53,10 @@ exports.createBookingCheckout = catchAsync(async (req, res, next) => {
   // only temporary bcos it's unsecure
   const {tour, user, price} = req.query;
   if (!tour && !user && !price) return next();
+  let users = await User.findById(user);
+  await users.getBookedTours(tour);
   await Booking.create({tour, user, price});
+  await users.save({validateBeforeSave: false});
   res.redirect(req.originalUrl.split('?')[0]);
 });
 

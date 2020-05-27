@@ -1,6 +1,6 @@
 const Tour = require('../models/tourModel');
 const User = require('../models/userModel');
-const Booking = require('../models/bookingModel');
+const Review = require('../models/reviewModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 exports.getOverview = catchAsync(async (req, res, next) => {
@@ -12,28 +12,37 @@ exports.getOverview = catchAsync(async (req, res, next) => {
 });
 
 exports.getTour = catchAsync(async (req, res, next) => {
-  const bookings = await Booking.find({
-    tour: req.body.tour[0]._id,
-    user: req.user.id,
-  });
+  // console.log(req.user);
 
-  let newID;
-  if (bookings.length > 0) {
-    newID = bookings[0].tour.id;
-  } else {
-    newID = '1234';
-  }
+  // const bookings = await Booking.find({
+  //   tour: req.body.tour[0]._id,
+  //   user: req.user.id,
+  // });
+
+  // let newID;
+  // if (bookings.length > 0) {
+  //   newID = bookings[0].tour.id;
+  // } else {
+  //   newID = '1234';
+  // }
+
   const tour = await Tour.findOne({slug: req.params.tour}).populate({
     path: 'reviews',
     fields: 'review rating user',
   });
-
   let booked;
-  if (tour._id == newID) {
+  if (req.user.bookedTours.includes(tour._id)) {
     booked = true;
   } else {
     booked = false;
   }
+  // if(req.user.incluse)
+
+  // if (tour._id == newID) {
+  //   booked = true;
+  // } else {
+  //   booked = false;
+  // }
   if (!tour) return next(new AppError('There is no tour with that name.', 404));
   res.status(200).render('tour', {title: `${tour.name} Tour`, tour, booked});
 });
@@ -51,21 +60,19 @@ exports.me = (req, res) => {
 };
 
 exports.getMyTours = catchAsync(async (req, res, next) => {
-  const bookings = await Booking.find({user: req.user.id});
-  // if (bookings.length > 0) {
-  //   return next(new AppError('You have already booked this tour', 404));
-  // }
-
-  const tourIDs = bookings.map((el) => el.tour);
-  const tours = await Tour.find({_id: {$in: tourIDs}});
-
-  res
-    .status(200)
-    .render('overview', {title: 'My booked tours', tours, bookings});
+  // const tours = await Tour.find({_id: {$in: tourIDs}});
+  // const tourIDs = bookings.map((el) => el.tour);
+  let userTours = req.user.bookedTours;
+  const tours = await Tour.find({_id: {$in: userTours}});
+  res.status(200).render('overview', {title: 'My booked tours', tours});
 });
 
 exports.getMyReviews = catchAsync(async (req, res, next) => {
-  res.status(200).render('myReviews', {title: 'My Reviews'});
+  const reviews = await Review.find().populate({
+    path: 'tour',
+    fields: 'name',
+  });
+  res.status(200).render('myReviews', {title: 'My Reviews', reviews});
 });
 
 exports.getMyBillings = catchAsync(async (req, res, next) => {

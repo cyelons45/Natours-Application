@@ -22,17 +22,23 @@ router.get(
   '/tour/:tour',
   authController.protect,
   bookingController.setTourUserIds,
-  authController.getTourID,
+  //   authController.getTourID,
   viewsController.getTour
 );
 router.get(
   '/my-tours',
   authController.protect,
-  //   bookingController.setTourUserIds,
+  bookingController.setTourUserIds,
   //   authController.checkBookings,
   viewsController.getMyTours
 );
-router.get('/my-reviews', authController.protect, viewsController.getMyReviews);
+router.get(
+  '/my-reviews',
+  authController.protect,
+  bookingController.setTourUserIds,
+  //   authController.getTourID,
+  viewsController.getMyReviews
+);
 router.get(
   '/my-billings',
   authController.protect,
