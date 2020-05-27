@@ -10,6 +10,7 @@ const rateLimit = require('express-rate-limit');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 var cookieParser = require('cookie-parser');
+var compression = require('compression');
 
 var tourRouter = require('./routes/tourRoutes');
 var userRouter = require('./routes/userRoutes');
@@ -62,7 +63,7 @@ app.use(
     ],
   })
 );
-
+app.use(compression());
 // app.get('/', (req, res) => {
 //   res.status(200).render('base', {tour: 'The Forest Hiker', user: 'Samuel'});
 // });

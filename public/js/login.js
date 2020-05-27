@@ -2,7 +2,7 @@ import axios from 'axios';
 import {showAlert} from './alerts';
 export const login = async (email, password) => {
   try {
-    const res = await axios.post('http://127.0.0.1:4000/api/v1/users/login', {
+    const res = await axios.post('/api/v1/users/login', {
       email,
       password,
     });
@@ -19,7 +19,7 @@ export const login = async (email, password) => {
 
 export const logout = async () => {
   try {
-    const res = await axios.get('http://127.0.0.1:4000/api/v1/users/logout');
+    const res = await axios.get('/api/v1/users/logout');
     if (res.data.status === 'success')
       window.setTimeout(() => {
         location.assign('/');
@@ -39,10 +39,7 @@ export const signup = async (name, email, password, passwordConfirm) => {
       password,
       passwordConfirm,
     };
-    const res = await axios.post(
-      `http://127.0.0.1:4000/api/v1/users/signup`,
-      persDetails
-    );
+    const res = await axios.post(`/api/v1/users/signup`, persDetails);
     showAlert('success', 'You are sign in.');
     if (res.data.status === 'success')
       window.setTimeout(() => {

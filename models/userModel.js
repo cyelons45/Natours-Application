@@ -106,6 +106,7 @@ userSchema.methods.getBookedTours = function (tourID) {
   this.bookedTours.push(tourID);
 };
 userSchema.methods.cancelBookedTours = function (tourID) {
+  if(this.bookedTours.length>0)
   let res = this.bookedTours.findIndex((el) => {
     if (el === tourID) return el;
   });
