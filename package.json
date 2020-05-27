@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www.js",
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www",
     "prod": "NODE_ENV=production nodemon ./bin/www",
     "debug": "ndb server.js",
     "watch": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js",
