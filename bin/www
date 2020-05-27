@@ -5,35 +5,35 @@
  */
 // import app from '../app.js';
 //uncaught exception
-process.on ('uncaughtException', err => {
-  console.log (err.name, +': ' + err.message);
-  console.log ('UNCAUGHT EXCEPTION! Shutting down...');
-  process.exit (1);
+process.on('uncaughtException', (err) => {
+  console.log(err.name, +': ' + err.message);
+  console.log('UNCAUGHT EXCEPTION! Shutting down...');
+  process.exit(1);
 });
 
-var mongoose = require ('mongoose');
-var sql = require ('mssql');
-var app = require ('../app');
-var logger = require ('morgan');
-var debug = require ('debug') ('node-remaster1:server');
-var http = require ('http');
-const dotenv = require ('dotenv');
-dotenv.config ({path: './config.env'});
+var mongoose = require('mongoose');
+var sql = require('mssql');
+var app = require('../app');
+var logger = require('morgan');
+var debug = require('debug')('node-remaster1:server');
+var http = require('http');
+const dotenv = require('dotenv');
+dotenv.config({path: './config.env'});
 
 //===================================================================================================
 // CONNECT DATABASE TO SQL SERVER
 // config for your database
-var config = {
-  user: process.env.SQL_USER,
-  password: process.env.SQL_PASSWORD,
-  server: process.env.SQLSERVER,
-  database: process.env.SQL_DATABASE,
-  port: 3000,
-  options: {
-    encrypt: true,
-    enableArithAbort: true,
-  },
-};
+// var config = {
+//   user: process.env.SQL_USER,
+//   password: process.env.SQL_PASSWORD,
+//   server: process.env.SQLSERVER,
+//   database: process.env.SQL_DATABASE,
+//   port: 3000,
+//   options: {
+//     encrypt: true,
+//     enableArithAbort: true,
+//   },
+// };
 //===================================================================================================
 // let sqlRequest = sql.connect(config).then(() => {
 //   console.log('SQL Server DB Connection successful');
@@ -66,18 +66,18 @@ var config = {
 //////////CONNECTION TO MONGODB/MONGOOSE/////////////////////////////////////////
 
 //Set up default mongoose connection
-var DB = process.env.DATABASE.replace (
+var DB = process.env.DATABASE.replace(
   '<PASSWORD>',
   process.env.DATABASE_PASSWORD
 );
 mongoose
-  .connect (DB, {
+  .connect(DB, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
   })
-  .then (() => console.log ('MongoDB Connection successful'));
+  .then(() => console.log('MongoDB Connection successful'));
 // .catch (err => console.log (err.type));
 // var tourSchema = new mongoose.Schema({
 //   name: {
@@ -120,47 +120,48 @@ mongoose
 
 // ////////////////////////////////////////////////////////
 if (process.env.NODE_ENV === 'production') {
-  var port = normalizePort (process.env.PORT);
-  console.log ('Running in production');
+  var port = normalizePort(process.env.PORT);
+  console.log('Running in production');
 } else if (process.env.NODE_ENV === 'development') {
-  var port = normalizePort ('4000');
-  console.log ('Running in development');
-  app.use (logger ('dev'));
+  var port = normalizePort(process.env.PORT);
+  console.log('Running in development');
+  app.use(logger('dev'));
 }
 // var port = normalizePort(process.env.PORT || '3000');
-app.set ('port', port);
+app.set('port', port);
 /**
  * Create HTTP server.
  */
-var server = http.createServer (app);
+var server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-const Server = server.listen (port, () => {
-  console.log ('Listening to port ' + port);
+const Server = server.listen(port, () => {
+  console.log('Listening to port ' + port);
 });
 
 //unhandled rejection
-process.on ('unhandledRejection', err => {
-  console.log (err.name, +': ' + err.message);
-  console.log ('UNHANDLED REJECTION! Shutting down...');
-  Server.close (() => {
-    process.exit (1);
+process.on('unhandledRejection', (err) => {
+  // console.log(err.stack);
+  console.log(err.name, +': ' + err.message);
+  console.log('UNHANDLED REJECTION! Shutting down...');
+  Server.close(() => {
+    process.exit(1);
   });
 });
 
 // server.on('error', onError);
-server.on ('listening', onListening);
+server.on('listening', onListening);
 
 /**
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort (val) {
-  var port = parseInt (val, 10);
+function normalizePort(val) {
+  var port = parseInt(val, 10);
 
-  if (isNaN (port)) {
+  if (isNaN(port)) {
     // named pipe
     return val;
   }
@@ -177,7 +178,7 @@ function normalizePort (val) {
  * Event listener for HTTP server "error" event.
  */
 
-function onError (error) {
+function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -187,12 +188,12 @@ function onError (error) {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error (bind + ' requires elevated privileges');
-      process.exit (1);
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
       break;
     case 'EADDRINUSE':
-      console.error (bind + ' is already in use');
-      process.exit (1);
+      console.error(bind + ' is already in use');
+      process.exit(1);
       break;
     default:
       throw error;
@@ -203,8 +204,8 @@ function onError (error) {
  * Event listener for HTTP server "listening" event.
  */
 
-function onListening () {
-  var addr = server.address ();
+function onListening() {
+  var addr = server.address();
   var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
-  debug ('Listening on ' + bind);
+  debug('Listening on ' + bind);
 }
