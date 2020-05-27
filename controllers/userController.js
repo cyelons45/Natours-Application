@@ -29,7 +29,7 @@ function multerFilter(req, file, cb) {
   }
 }
 
-var upload = multer({storage: storage, fileFilter: multerFilter});
+var upload = multer({storage, fileFilter: multerFilter});
 
 exports.uploadUserPhoto = upload.single('photo');
 exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
