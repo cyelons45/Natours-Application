@@ -161,7 +161,12 @@ server.on('listening', onListening);
 /**
  * Normalize a port into a number, string, or false.
  */
-
+process.on('SIGTERM', () => {
+  console.log('☠️SIGTERM RECEIVED. Shutting down gracfully.👋');
+  server.close(() => {
+    console.log('✴ 💥 Process terminated!');
+  });
+});
 function normalizePort(val) {
   var port = parseInt(val, 10);
 

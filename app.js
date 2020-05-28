@@ -18,7 +18,7 @@ var reviewRouter = require('./routes/reviewRoute');
 var bookingRouter = require('./routes/bookingRoute');
 var viewRouter = require('./routes/viewRoutes');
 var app = express();
-
+app.enable('trust proxy');
 // if (process.env.NODE_ENV === 'production') {
 //   console.log('Running in production');
 // } else if (process.env.NODE_ENV === 'development') {
