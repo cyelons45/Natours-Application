@@ -11,7 +11,7 @@ const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 var cookieParser = require('cookie-parser');
 var compression = require('compression');
-
+var cors = require('cors');
 var tourRouter = require('./routes/tourRoutes');
 var userRouter = require('./routes/userRoutes');
 var reviewRouter = require('./routes/reviewRoute');
@@ -27,7 +27,9 @@ app.enable('trust proxy');
 // }
 
 app.use(helmet());
-
+app.use(cors());
+app.options('/products/:id', cors());
+app.options('*', cors());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
