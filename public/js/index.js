@@ -3,7 +3,7 @@ import {displayMap} from './mapbox';
 import {login, logout, signup} from './login';
 import {updateMe} from './updateSettings';
 import {payment} from './payment';
-
+import {showAlert} from './alerts';
 // DOM ELEMENTS
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
@@ -70,6 +70,8 @@ if (tour_Payment)
     payment(e.target.dataset.tourId);
   });
 
+const alertMessage = document.querySelector('body').dataset.alert;
+if (alert) showAlert('success', alertMessage, 20);
 // if (sidebar)
 //   sidebar.addEventListener('click', (e) => {
 //     console.log(e.target.closest('.side-nav'));

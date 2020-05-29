@@ -65,7 +65,6 @@ const createBookingCheckout = catchAsync(async (session) => {
   let user = users._id;
 
   const tour = session.client_reference_id;
-  console.log(tour, user);
   let price = session.display_items[0].amount / 100;
   await Booking.create({tour, user, price});
   await users.getBookedTours(tour);

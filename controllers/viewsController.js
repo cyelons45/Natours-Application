@@ -53,6 +53,13 @@ exports.loginForm = catchAsync(async (req, res, next) => {
 exports.signupForm = catchAsync(async (req, res, next) => {
   res.status(200).render('signup', {title: 'Your account'});
 });
+exports.alerts = catchAsync(async (req, res, next) => {
+  const {alert} = req.query;
+  if (alert === 'booking')
+    res.locals.alert = `Your booking was successfull! Please check your email for a confirmation.
+  if your booking doesn't show up here immediately,please come back later`;
+  next();
+});
 
 exports.me = (req, res) => {
   // const user = res.locals.user;
