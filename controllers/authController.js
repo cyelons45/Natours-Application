@@ -22,9 +22,10 @@ const createSendToken = (user, statusCode, req, res) => {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
-    secure: req.secure || req.headers('x-forwarded-proto' === 'https'),
     httpOnly: true,
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
   });
+  user.password = undefined;
   res.status(statusCode).json({status: 'success', token, data: {user}});
 };
 
@@ -44,6 +45,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 
 exports.login = catchAsync(async (req, res, next) => {
   const {email, password} = req.body;
+
   if (!email || !password) {
     return next(new AppError('Please provide email and password', 400));
   }
