@@ -6,7 +6,7 @@ const bookingController = require('../controllers/bookingController');
 // router.use(authController.isLoggedIn);
 router.get(
   '/',
-  bookingController.createBookingCheckout,
+  // bookingController.createBookingCheckout,
   authController.isLoggedIn,
   viewsController.getOverview
 );
@@ -28,7 +28,7 @@ router.get(
 router.get(
   '/my-tours',
   authController.protect,
-  bookingController.setTourUserIds,
+  // bookingController.setTourUserIds,
   //   authController.checkBookings,
   viewsController.getMyTours
 );
