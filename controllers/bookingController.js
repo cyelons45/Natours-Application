@@ -61,9 +61,9 @@ const createBookingCheckout = catchAsync(async (session) => {
   // const {tour, user, price} = req.query;
   // if (!tour && !user && !price) return next();
   // await users.getBookedTours(tour);
-  let user = await User.findById({email: session.customer_email});
+  let user = await User.findOne({email: session.customer_email});
   console.log(user);
-  let userId = user._id;
+  let userId = user.id;
 
   const tour = session.client_reference_id;
   let price = session.display_items[0].amount / 100;
