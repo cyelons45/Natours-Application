@@ -62,7 +62,7 @@ const createBookingCheckout = catchAsync(async (session) => {
   // if (!tour && !user && !price) return next();
   // await users.getBookedTours(tour);
   let users = await User.findOne({email: session.customer_email});
-  let user = user._id;
+  let user = users._id;
 
   const tour = session.client_reference_id;
   console.log(tour, user);
