@@ -56,7 +56,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 //   res.redirect(req.originalUrl.split('?')[0]);
 // });
 
-exports.createBookingCheckout = catchAsync(async (session) => {
+const createBookingCheckout = catchAsync(async (session) => {
   // only temporary bcos it's unsecure
   // const {tour, user, price} = req.query;
   // if (!tour && !user && !price) return next();
