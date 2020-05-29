@@ -71,7 +71,7 @@ if (tour_Payment)
   });
 
 const alertMessage = document.querySelector('body').dataset.alert;
-if (alert) showAlert('success', alertMessage, 20);
+if (alertMessage) showAlert('success', alertMessage, 20);
 // if (sidebar)
 //   sidebar.addEventListener('click', (e) => {
 //     console.log(e.target.closest('.side-nav'));
