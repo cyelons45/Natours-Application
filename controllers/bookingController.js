@@ -61,15 +61,15 @@ const createBookingCheckout = catchAsync(async (session) => {
   // const {tour, user, price} = req.query;
   // if (!tour && !user && !price) return next();
   // await users.getBookedTours(tour);
-  let user = await User.findOne({email: session.customer_email});
-  let userId = user._id;
+  let users = await User.findOne({email: session.customer_email});
+  let user = user._id;
 
   const tour = session.client_reference_id;
-  console.log(tour, userId);
+  console.log(tour, user);
   let price = session.display_items[0].amount / 100;
-  await Booking.create({tour, userId, price});
-  await user.getBookedTours(tour);
-  await user.save({validateBeforeSave: false});
+  await Booking.create({tour, user, price});
+  await users.getBookedTours(tour);
+  await users.save({validateBeforeSave: false});
 });
 
 exports.webhookCheckout = (req, res, next) => {
